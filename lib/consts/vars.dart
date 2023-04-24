@@ -1,0 +1,4 @@
+enum NewsType{
+  topTrading,
+  allNews
+}
