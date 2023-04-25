@@ -20,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var newType = NewsType.allNews;
   int currentPageIndex = 0;
+  String sortBy = SortByEnum.publishedAt.name;
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +126,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     });
                   }, text: 'Next'),
                 ],),
+              ),
+              const VerticalSpacing(10),
+              newType == NewsType.topTrading ? Container():Align(
+                alignment: Alignment.topRight,
+                child: Material(
+                  color: Theme.of(context).cardColor,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: DropdownButton(
+                        value: sortBy,
+                        items: dropDownItems,
+                        onChanged: (String ? value){}),
+                  ),
+                ),
               )
             ],
           ),
@@ -132,7 +147,23 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
+  List<DropdownMenuItem<String>> get dropDownItems{
+    List<DropdownMenuItem<String>> menuItem =[
+      DropdownMenuItem(
+        value: SortByEnum.relevancy.name,
+          child: Text(SortByEnum.relevancy.name),
+      ),
+      DropdownMenuItem(
+        value: SortByEnum.popularity.name,
+        child: Text(SortByEnum.popularity.name),
+      ),
+      DropdownMenuItem(
+        value: SortByEnum.publishedAt.name,
+        child: Text(SortByEnum.publishedAt.name),
+      ),
+    ];
+    return menuItem;
+  }
   Widget paginationButton({required Function function,required String text}){
     return  ElevatedButton(
       onPressed: (){function();},
