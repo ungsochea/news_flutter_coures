@@ -40,10 +40,11 @@ dependencies:
     # UI
   cupertino_icons: ^1.0.2
   flutter_iconly: ^1.0.2
+  fancy_shimmer_image: ^2.0.2
   # Management
   provider: ^6.0.3
   shared_preferences: ^2.0.15
-  google_fonts: ^4.0.3
+  google_fonts: ^4.0.4
 
 
 dev_dependencies:
