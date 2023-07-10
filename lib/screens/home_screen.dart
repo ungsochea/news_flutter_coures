@@ -10,6 +10,8 @@ import 'package:news_flutter_course/widgets/drawer_widget.dart';
 import 'package:news_flutter_course/widgets/tabs_widget.dart';
 import 'package:news_flutter_course/widgets/vertical_spacing.dart';
 
+import '../widgets/loading_widget.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -142,14 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              Expanded(
-                  child: ListView.builder(
-                      itemCount: 20,
-                      itemBuilder: (ctx,index){
-                        return ArticleWidget();
-                      }
-                  )
-              )
+              LoadingWidget(),
             ],
           ),
         ),
