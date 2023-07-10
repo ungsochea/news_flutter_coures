@@ -1,3 +1,4 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -8,6 +9,7 @@ import 'package:news_flutter_course/services/utils.dart';
 import 'package:news_flutter_course/widgets/articles_widget.dart';
 import 'package:news_flutter_course/widgets/drawer_widget.dart';
 import 'package:news_flutter_course/widgets/tabs_widget.dart';
+import 'package:news_flutter_course/widgets/top_trending.dart';
 import 'package:news_flutter_course/widgets/vertical_spacing.dart';
 
 import '../widgets/loading_widget.dart';
@@ -28,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
+    final size = Utils(context).getScreenSize;
 
     return SafeArea(
       child: Scaffold(
@@ -144,7 +147,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              LoadingWidget(),
+              if(newType == NewsType.allNews) 
+              Expanded(
+                    child: ListView.builder(
+                        itemCount: 20,
+                        itemBuilder: (ctx,index){
+                          return const ArticleWidget();
+                        }
+                    )
+              ), 
+              // const LoadingWidget(newsType: NewsType.allNews,)
+              if(newType == NewsType.topTrading) 
+              SizedBox(
+                height: size.height * 0.5,
+                child: 
+                Swiper(
+                  autoplay: true,
+                  autoplayDelay: 8000,
+                  itemWidth: size.width * 0.9,
+                  layout: SwiperLayout.STACK,
+                  viewportFraction: 0.9,
+                  itemCount: 5,
+                  itemBuilder: (context, index){
+                    return const TopTrendingWidget();
+                  }
+                )
+                // LoadingWidget(newsType: NewsType.topTrading,)
+                ,
+              ),
             ],
           ),
         ),
