@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_flutter_course/services/utils.dart';
 import 'package:news_flutter_course/widgets/vertical_spacing.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewDetilScreen extends StatefulWidget {
@@ -15,11 +19,12 @@ class NewDetilScreen extends StatefulWidget {
 class _NewDetilScreenState extends State<NewDetilScreen> {
   late WebViewController _webViewController;
   double _progress = 0.0;
+  final url =
+      "https://techcrunch.com/2023/07/06/you-cant-post-ass-threads-is-doomed-meta-instagram-twitter/?cx_testId=6&cx_testVariant=cx_undefined&cx_artPos=2#cxrecs_s";
 
   @override
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
-
     return WillPopScope(
       onWillPop: () async {
         if (await _webViewController.canGoBack()) {
@@ -54,8 +59,7 @@ class _NewDetilScreenState extends State<NewDetilScreen> {
           ),
         ),
         body: WebView(
-          initialUrl:
-              "https://techcrunch.com/2023/07/06/you-cant-post-ass-threads-is-doomed-meta-instagram-twitter/?cx_testId=6&cx_testVariant=cx_undefined&cx_artPos=2#cxrecs_s",
+          initialUrl: url,
           zoomEnabled: true,
           onProgress: (progress) {
             setState(() {
@@ -105,17 +109,36 @@ class _NewDetilScreenState extends State<NewDetilScreen> {
               ListTile(
                 leading: const Icon(Icons.share),
                 title: const Text("Share"),
-                onTap: () {},
+                onTap: () async {
+                  try {
+                    Share.share('check out my website https://example.com',
+                        subject: 'Look what I made!');
+                  } catch (err) {
+                    log(err.toString());
+                  }
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.open_in_browser),
                 title: const Text("Open in browser"),
-                onTap: () {},
+                onTap: () async {
+                  if (!await launchUrl(Uri.parse(url))) {
+                    throw Exception('Could not launch $url');
+                  }
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.refresh),
                 title: const Text("Refresh"),
-                onTap: () {},
+                onTap: () async {
+                  try {
+                    _webViewController.reload();
+                  } catch (err) {
+                    log("error $err");
+                  } finally {
+                    Navigator.of(context).pop();
+                  }
+                },
               ),
             ]),
           );
