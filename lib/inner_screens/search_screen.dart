@@ -3,6 +3,7 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:news_flutter_course/consts/vars.dart';
 import 'package:news_flutter_course/services/utils.dart';
+import 'package:news_flutter_course/widgets/empty_screen.dart';
 import 'package:news_flutter_course/widgets/vertical_spacing.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -104,7 +105,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     );
                   },
                 ),
-              )
+              ),
+              const EmptyNewsWidget(
+                  text: "Ops! No results found",
+                  imagePath: "assets/images/search.png")
             ],
           ),
         ),
