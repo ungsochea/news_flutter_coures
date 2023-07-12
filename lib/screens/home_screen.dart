@@ -8,6 +8,7 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_flutter_course/consts/vars.dart';
 import 'package:news_flutter_course/inner_screens/search_screen.dart';
+import 'package:news_flutter_course/models/news_models.dart';
 import 'package:news_flutter_course/services/news_api.dart';
 import 'package:news_flutter_course/services/utils.dart';
 import 'package:news_flutter_course/widgets/articles_widget.dart';
@@ -30,11 +31,17 @@ class _HomeScreenState extends State<HomeScreen> {
   var newType = NewsType.allNews;
   int currentPageIndex = 0;
   String sortBy = SortByEnum.publishedAt.name;
+  List<NewsModel> newList = [];
 
   @override
   void didChangeDependencies() {
-    NewsApiServices.getAllNews();
+    getNetList();
     super.didChangeDependencies();
+  }
+
+  Future<void> getNetList() async {
+    newList = await NewsApiServices.getAllNews();
+    setState(() {});
   }
 
   @override
@@ -189,9 +196,11 @@ class _HomeScreenState extends State<HomeScreen> {
               if (newType == NewsType.allNews)
                 Expanded(
                     child: ListView.builder(
-                        itemCount: 20,
+                        itemCount: newList.length,
                         itemBuilder: (ctx, index) {
-                          return const ArticleWidget();
+                          return ArticleWidget(
+                            imageUrl: newList[index].urlToImage,
+                          );
                         })),
               // const LoadingWidget(newsType: NewsType.allNews,)
               if (newType == NewsType.topTrading)

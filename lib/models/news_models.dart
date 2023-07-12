@@ -32,7 +32,8 @@ class NewsModel {
         title: json["title"] ?? "",
         description: json["description"] ?? "",
         url: json["url"] ?? "",
-        urlToImage: json["urlToImage"] ?? "",
+        urlToImage: json["urlToImage"] ??
+            "https://i.guim.co.uk/img/media/cd6efbd1bade44704b0b4f1d7a2b72e3a635a823/0_247_5568_3341/master/5568.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=1dc4191028d3f1147475a2ea0acc8d6a",
         publishedAt: json["publishedAt"] ?? "",
         dateToshow: "dataToShow",
         content: json["content"] ?? "",

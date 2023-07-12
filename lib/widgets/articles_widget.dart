@@ -9,8 +9,8 @@ import 'package:page_transition/page_transition.dart';
 import '../consts/vars.dart';
 
 class ArticleWidget extends StatelessWidget {
-  const ArticleWidget({Key? key}) : super(key: key);
-
+  const ArticleWidget({Key? key, required this.imageUrl}) : super(key: key);
+  final String imageUrl;
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
@@ -50,8 +50,7 @@ class ArticleWidget extends StatelessWidget {
                           height: size.height * 0.12,
                           width: size.height * 0.12,
                           boxFit: BoxFit.fill,
-                          imageUrl:
-                              "https://i.guim.co.uk/img/media/cd6efbd1bade44704b0b4f1d7a2b72e3a635a823/0_247_5568_3341/master/5568.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=1dc4191028d3f1147475a2ea0acc8d6a"),
+                          imageUrl: imageUrl),
                     ),
                     const SizedBox(
                       width: 10,
