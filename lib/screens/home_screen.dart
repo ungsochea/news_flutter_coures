@@ -13,6 +13,7 @@ import 'package:news_flutter_course/services/news_api.dart';
 import 'package:news_flutter_course/services/utils.dart';
 import 'package:news_flutter_course/widgets/articles_widget.dart';
 import 'package:news_flutter_course/widgets/drawer_widget.dart';
+import 'package:news_flutter_course/widgets/empty_screen.dart';
 import 'package:news_flutter_course/widgets/tabs_widget.dart';
 import 'package:news_flutter_course/widgets/top_trending.dart';
 import 'package:news_flutter_course/widgets/vertical_spacing.dart';
@@ -39,9 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.didChangeDependencies();
   }
 
-  Future<void> getNetList() async {
-    newList = await NewsApiServices.getAllNews();
-    setState(() {});
+  Future<List<NewsModel>> getNetList() async {
+    List<NewsModel> newList = await NewsApiServices.getAllNews();
+    return newList;
   }
 
   @override
@@ -193,32 +194,77 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-              if (newType == NewsType.allNews)
-                Expanded(
-                    child: ListView.builder(
-                        itemCount: newList.length,
-                        itemBuilder: (ctx, index) {
-                          return ArticleWidget(
-                            imageUrl: newList[index].urlToImage,
-                          );
-                        })),
+              FutureBuilder<List<NewsModel>>(
+                  future: getNetList(),
+                  builder: ((context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return newType == NewsType.allNews
+                          ? const LoadingWidget(
+                              newsType: NewsType.allNews,
+                            )
+                          : const Expanded(
+                              child: LoadingWidget(
+                              newsType: NewsType.topTrading,
+                            ));
+                    } else if (snapshot.hasError) {
+                      return Expanded(
+                          child: EmptyNewsWidget(
+                              text: "an error accoured ${snapshot.hasError}",
+                              imagePath: "assets/images/no_news.png"));
+                    } else if (snapshot.data == null) {
+                      return const Expanded(
+                          child: EmptyNewsWidget(
+                              text: "No news found",
+                              imagePath: "assets/images/no_news.png"));
+                    }
+                    return newType == NewsType.allNews
+                        ? Expanded(
+                            child: ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                itemBuilder: (ctx, index) {
+                                  return ArticleWidget(
+                                    imageUrl: snapshot.data![index].urlToImage,
+                                  );
+                                }))
+                        : SizedBox(
+                            height: size.height * 0.5,
+                            child: Swiper(
+                                autoplay: true,
+                                autoplayDelay: 8000,
+                                itemWidth: size.width * 0.9,
+                                layout: SwiperLayout.STACK,
+                                viewportFraction: 0.9,
+                                itemCount: 5,
+                                itemBuilder: (context, index) {
+                                  return const TopTrendingWidget();
+                                }));
+                  }))
+              // if (newType == NewsType.allNews)
+              //   Expanded(
+              //       child: ListView.builder(
+              //           itemCount: newList.length,
+              //           itemBuilder: (ctx, index) {
+              //             return ArticleWidget(
+              //               imageUrl: newList[index].urlToImage,
+              //             );
+              //           })),
               // const LoadingWidget(newsType: NewsType.allNews,)
-              if (newType == NewsType.topTrading)
-                SizedBox(
-                  height: size.height * 0.5,
-                  child: Swiper(
-                      autoplay: true,
-                      autoplayDelay: 8000,
-                      itemWidth: size.width * 0.9,
-                      layout: SwiperLayout.STACK,
-                      viewportFraction: 0.9,
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return const TopTrendingWidget();
-                      })
-                  // LoadingWidget(newsType: NewsType.topTrading,)
-                  ,
-                ),
+              // if (newType == NewsType.topTrading)
+              //   SizedBox(
+              //     height: size.height * 0.5,
+              //     child: Swiper(
+              //         autoplay: true,
+              //         autoplayDelay: 8000,
+              //         itemWidth: size.width * 0.9,
+              //         layout: SwiperLayout.STACK,
+              //         viewportFraction: 0.9,
+              //         itemCount: 5,
+              //         itemBuilder: (context, index) {
+              //           return const TopTrendingWidget();
+              //         })
+              // LoadingWidget(newsType: NewsType.topTrading,)
+              // ,
+              // ),
             ],
           ),
         ),
