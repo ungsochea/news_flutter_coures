@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:news_flutter_course/inner_screens/blog_details.dart';
 import 'package:news_flutter_course/inner_screens/news_detail.dart';
 import 'package:news_flutter_course/services/utils.dart';
 import 'package:news_flutter_course/widgets/vertical_spacing.dart';
@@ -17,25 +18,27 @@ class ArticleWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Material(
         color: Theme.of(context).cardColor,
-        child: Stack(
-          children: [
-            Container(
-              height: 60,
-              width: 60,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Container(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, BlogDetailScreen.routeName);
+          },
+          child: Stack(
+            children: [
+              Container(
                 height: 60,
                 width: 60,
                 color: Theme.of(context).colorScheme.secondary,
               ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Container(
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  height: 60,
+                  width: 60,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              Container(
                 color: Theme.of(context).cardColor,
                 padding: const EdgeInsets.all(10.0),
                 margin: const EdgeInsets.all(10.0),
@@ -103,8 +106,8 @@ class ArticleWidget extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
