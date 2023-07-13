@@ -1,3 +1,6 @@
+import 'package:news_flutter_course/services/global_methods.dart';
+import 'package:reading_time/reading_time.dart';
+
 class NewsModel {
   String newsId,
       sourceName,
@@ -25,19 +28,26 @@ class NewsModel {
       required this.readingTimeText});
 
   factory NewsModel.fromJson(dynamic json) {
+    String title = json["title"] ?? "";
+    String description = json["description"] ?? "";
+    String content = json["content"] ?? "";
+    String dateToShow = "";
+    if (json["publishedAt"] != null) {
+      dateToShow = GlobalMethods.formettedDateText(json["publishedAt"]);
+    }
     return NewsModel(
         newsId: json["source"]["id"] ?? "",
         sourceName: json["source"]["name"] ?? "",
         authorName: json["author"] ?? "",
-        title: json["title"] ?? "",
-        description: json["description"] ?? "",
+        title: title,
+        description: description,
         url: json["url"] ?? "",
         urlToImage: json["urlToImage"] ??
             "https://i.guim.co.uk/img/media/cd6efbd1bade44704b0b4f1d7a2b72e3a635a823/0_247_5568_3341/master/5568.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=1dc4191028d3f1147475a2ea0acc8d6a",
         publishedAt: json["publishedAt"] ?? "",
-        dateToshow: "dataToShow",
-        content: json["content"] ?? "",
-        readingTimeText: "readingTimeText");
+        dateToshow: dateToShow,
+        content: content,
+        readingTimeText: readingTime(title + description + content).msg);
   }
 
   static List<NewsModel> newFromSnapshot(List newSnapshot) {
