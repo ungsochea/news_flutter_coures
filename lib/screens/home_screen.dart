@@ -34,16 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
   String sortBy = SortByEnum.publishedAt.name;
   List<NewsModel> newList = [];
 
-  @override
-  void didChangeDependencies() {
-    getNetList();
-    super.didChangeDependencies();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   getNetList();
+  //   super.didChangeDependencies();
+  // }
 
-  Future<List<NewsModel>> getNetList() async {
-    List<NewsModel> newList = await NewsApiServices.getAllNews();
-    return newList;
-  }
+  // Future<List<NewsModel>> getNetList() async {
+  //   List<NewsModel> newList = await NewsApiServices.getAllNews();
+  //   return newList;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -195,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
               FutureBuilder<List<NewsModel>>(
-                  future: getNetList(),
+                  future: NewsApiServices.getAllNews(),
                   builder: ((context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return newType == NewsType.allNews
@@ -209,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     } else if (snapshot.hasError) {
                       return Expanded(
                           child: EmptyNewsWidget(
-                              text: "an error accoured ${snapshot.hasError}",
+                              text: "ddan error accoured ${snapshot.error}",
                               imagePath: "assets/images/no_news.png"));
                     } else if (snapshot.data == null) {
                       return const Expanded(
