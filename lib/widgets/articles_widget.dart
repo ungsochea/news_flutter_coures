@@ -9,8 +9,15 @@ import 'package:page_transition/page_transition.dart';
 import '../consts/vars.dart';
 
 class ArticleWidget extends StatelessWidget {
-  const ArticleWidget({Key? key, required this.imageUrl}) : super(key: key);
-  final String imageUrl;
+  const ArticleWidget(
+      {Key? key,
+      required this.imageUrl,
+      required this.title,
+      required this.url,
+      required this.dateToShow,
+      required this.readingTime})
+      : super(key: key);
+  final String imageUrl, title, url, dateToShow, readingTime;
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
@@ -61,7 +68,7 @@ class ArticleWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Title ' * 100,
+                          title,
                           maxLines: 2,
                           textAlign: TextAlign.justify,
                           overflow: TextOverflow.ellipsis,
@@ -71,7 +78,7 @@ class ArticleWidget extends StatelessWidget {
                         Align(
                             alignment: Alignment.topRight,
                             child: Text(
-                              '🕒 Reading Time',
+                              '🕒 $readingTime',
                               style: smallTextStyle,
                             )),
                         FittedBox(
@@ -83,7 +90,9 @@ class ArticleWidget extends StatelessWidget {
                                       context,
                                       PageTransition(
                                           type: PageTransitionType.rightToLeft,
-                                          child: const NewDetilScreen(),
+                                          child: NewDetilScreen(
+                                            url: url,
+                                          ),
                                           inheritTheme: true,
                                           ctx: context),
                                     );
@@ -93,7 +102,7 @@ class ArticleWidget extends StatelessWidget {
                                     color: Colors.blue,
                                   )),
                               Text(
-                                '30 May 2023 ' * 2,
+                                dateToShow,
                                 maxLines: 1,
                                 style: smallTextStyle,
                               ),

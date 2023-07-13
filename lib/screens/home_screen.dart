@@ -224,6 +224,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 itemBuilder: (ctx, index) {
                                   return ArticleWidget(
                                     imageUrl: snapshot.data![index].urlToImage,
+                                    title: snapshot.data![index].title,
+                                    url: snapshot.data![index].url,
+                                    readingTime:
+                                        snapshot.data![index].readingTimeText,
+                                    dateToShow:
+                                        snapshot.data![index].dateToshow,
                                   );
                                 }))
                         : SizedBox(
@@ -236,7 +242,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 viewportFraction: 0.9,
                                 itemCount: 5,
                                 itemBuilder: (context, index) {
-                                  return const TopTrendingWidget();
+                                  return TopTrendingWidget(
+                                      url: snapshot.data![index].url);
                                 }));
                   }))
               // if (newType == NewsType.allNews)

@@ -11,8 +11,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewDetilScreen extends StatefulWidget {
-  const NewDetilScreen({super.key});
-
+  const NewDetilScreen({super.key, required this.url});
+  final String url;
   @override
   State<NewDetilScreen> createState() => _NewDetilScreenState();
 }
@@ -20,8 +20,8 @@ class NewDetilScreen extends StatefulWidget {
 class _NewDetilScreenState extends State<NewDetilScreen> {
   late WebViewController _webViewController;
   double _progress = 0.0;
-  final url =
-      "https://techcrunch.com/2023/07/06/you-cant-post-ass-threads-is-doomed-meta-instagram-twitter/?cx_testId=6&cx_testVariant=cx_undefined&cx_artPos=2#cxrecs_s";
+  // final url =
+  //     "https://techcrunch.com/2023/07/06/you-cant-post-ass-threads-is-doomed-meta-instagram-twitter/?cx_testId=6&cx_testVariant=cx_undefined&cx_artPos=2#cxrecs_s";
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _NewDetilScreenState extends State<NewDetilScreen> {
           centerTitle: true,
           iconTheme: IconThemeData(color: color),
           title: Text(
-            'URL',
+            widget.url,
             style: TextStyle(color: color),
           ),
           actions: [
@@ -60,7 +60,7 @@ class _NewDetilScreenState extends State<NewDetilScreen> {
           ),
         ),
         body: WebView(
-          initialUrl: url,
+          initialUrl: widget.url,
           zoomEnabled: true,
           onProgress: (progress) {
             setState(() {
@@ -112,9 +112,7 @@ class _NewDetilScreenState extends State<NewDetilScreen> {
                 title: const Text("Share"),
                 onTap: () async {
                   try {
-                    await Share.share(
-                        'check out my website https://example.com',
-                        subject: 'Look what I made!');
+                    await Share.share(widget.url, subject: 'Look what I made!');
                   } catch (err) {
                     GlobalMethods().errorDialog(
                         errorMessage: err.toString(), context: context);
@@ -125,8 +123,8 @@ class _NewDetilScreenState extends State<NewDetilScreen> {
                 leading: const Icon(Icons.open_in_browser),
                 title: const Text("Open in browser"),
                 onTap: () async {
-                  if (!await launchUrl(Uri.parse(url))) {
-                    throw Exception('Could not launch $url');
+                  if (!await launchUrl(Uri.parse(widget.url))) {
+                    throw Exception('Could not launch $widget.url');
                   }
                 },
               ),

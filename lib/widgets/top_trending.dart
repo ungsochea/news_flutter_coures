@@ -7,13 +7,13 @@ import 'package:news_flutter_course/services/utils.dart';
 import 'package:page_transition/page_transition.dart';
 
 class TopTrendingWidget extends StatelessWidget {
-  const TopTrendingWidget({super.key});
+  const TopTrendingWidget({super.key, required this.url});
+  final String url;
 
   @override
   Widget build(BuildContext context) {
     final size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
-
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: InkWell(
@@ -50,7 +50,7 @@ class TopTrendingWidget extends StatelessWidget {
                       context,
                       PageTransition(
                           type: PageTransitionType.rightToLeft,
-                          child: const NewDetilScreen(),
+                          child: NewDetilScreen(url: url),
                           inheritTheme: true,
                           ctx: context),
                     );
