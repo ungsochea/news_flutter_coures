@@ -198,7 +198,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
               FutureBuilder<List<NewsModel>>(
-                  future: newsProvider.fetchAllNews(),
+                  future: newsProvider.fetchAllNews(
+                      pageIndex: currentPageIndex + 1),
                   builder: ((context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return newType == NewsType.allNews
@@ -225,14 +226,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: ListView.builder(
                                 itemCount: snapshot.data!.length,
                                 itemBuilder: (ctx, index) {
-                                  return ArticleWidget(
-                                    imageUrl: snapshot.data![index].urlToImage,
-                                    title: snapshot.data![index].title,
-                                    url: snapshot.data![index].url,
-                                    readingTime:
-                                        snapshot.data![index].readingTimeText,
-                                    dateToShow:
-                                        snapshot.data![index].dateToshow,
+                                  return ChangeNotifierProvider.value(
+                                    value: snapshot.data![index],
+                                    child: const ArticleWidget(
+                                        // imageUrl: snapshot.data![index].urlToImage,
+                                        // title: snapshot.data![index].title,
+                                        // url: snapshot.data![index].url,
+                                        // readingTime:
+                                        //     snapshot.data![index].readingTimeText,
+                                        // dateToShow:
+                                        //     snapshot.data![index].dateToshow,
+                                        ),
                                   );
                                 }))
                         : SizedBox(
