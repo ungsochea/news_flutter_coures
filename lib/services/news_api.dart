@@ -7,7 +7,8 @@ import 'package:news_flutter_course/consts/api_consts.dart';
 import 'package:news_flutter_course/models/news_models.dart';
 
 class NewsApiServices {
-  static Future<List<NewsModel>> getAllNews({required int page}) async {
+  static Future<List<NewsModel>> getAllNews(
+      {required int page, required String sortBy}) async {
     // var url = Uri.parse(
     //     "https://newsapi.org/v2/everything?q=Apple&pageSize=5&apiKey=28feb06972f34747acf9ebca8ea755d2");
 
@@ -16,7 +17,8 @@ class NewsApiServices {
         "q": "Apple",
         "pageSize": "5",
         "domains": "bbc.co.uk,techcrunch.com,engadget.com",
-        "page": page.toString()
+        "page": page.toString(),
+        "sortBy": sortBy
         // "apiKey": API_KEY
       });
       var response = await http.get(uri, headers: {"X-Api-key": API_KEY});
