@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:news_flutter_course/consts/vars.dart';
 import 'package:news_flutter_course/inner_screens/search_screen.dart';
 import 'package:news_flutter_course/models/news_models.dart';
+import 'package:news_flutter_course/providers/news_provider.dart';
 import 'package:news_flutter_course/services/news_api.dart';
 import 'package:news_flutter_course/services/utils.dart';
 import 'package:news_flutter_course/widgets/articles_widget.dart';
@@ -18,6 +19,7 @@ import 'package:news_flutter_course/widgets/tabs_widget.dart';
 import 'package:news_flutter_course/widgets/top_trending.dart';
 import 'package:news_flutter_course/widgets/vertical_spacing.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/loading_widget.dart';
 
@@ -49,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
     final size = Utils(context).getScreenSize;
+    final newsProvider = Provider.of<NewsProvider>(context);
 
     return SafeArea(
       child: Scaffold(
@@ -195,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
               FutureBuilder<List<NewsModel>>(
-                  future: NewsApiServices.getAllNews(),
+                  future: newsProvider.fetchAllNews(),
                   builder: ((context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return newType == NewsType.allNews

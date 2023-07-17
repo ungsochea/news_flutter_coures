@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:news_flutter_course/consts/api_consts.dart';
@@ -18,12 +19,13 @@ class NewsApiServices {
         // "apiKey": API_KEY
       });
       var response = await http.get(uri, headers: {"X-Api-key": API_KEY});
-      // print('Response status: ${response.statusCode}');
+      print('Response status: ${response.statusCode}');
       // print('Response body: ${response.body}');
       Map data = jsonDecode(response.body);
       List newsTempList = [];
       if (data['code'] != null) {
-        throw data['message'];
+        // throw data['message'];
+        throw HttpException(data['code']);
       }
       for (var v in data["articles"]) {
         newsTempList.add(v);

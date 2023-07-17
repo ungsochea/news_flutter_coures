@@ -71,6 +71,12 @@ class NewsModel {
     data['readingTimeText'] = readingTimeText;
     return data;
   }
+
+  // @override
+  // String toString() {
+  //   return "new {newId: $newsId}";
+  // }
+  // print error
 }
 
 // class NewsModel {
