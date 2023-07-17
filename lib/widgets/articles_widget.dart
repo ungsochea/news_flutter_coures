@@ -18,13 +18,15 @@ class ArticleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
     final newsModelProvider = Provider.of<NewsModel>(context);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
         color: Theme.of(context).cardColor,
         child: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, BlogDetailScreen.routeName);
+            Navigator.pushNamed(context, BlogDetailScreen.routeName,
+                arguments: newsModelProvider.publishedAt);
           },
           child: Stack(
             children: [

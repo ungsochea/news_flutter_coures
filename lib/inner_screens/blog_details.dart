@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_flutter_course/providers/news_provider.dart';
+import 'package:news_flutter_course/services/global_methods.dart';
 import 'package:news_flutter_course/services/utils.dart';
 import 'package:news_flutter_course/widgets/vertical_spacing.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class BlogDetailScreen extends StatefulWidget {
   const BlogDetailScreen({super.key});
@@ -18,6 +22,10 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
+    final newsProvider = Provider.of<NewsProvider>(context);
+    final publishedAt = ModalRoute.of(context)!.settings.arguments as String;
+    final currentNews = newsProvider.findbyDate(publishedAt: publishedAt);
+
     return Scaffold(
       appBar: AppBar(
         // iconTheme: IconThemeData(color: color),
@@ -25,7 +33,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
         centerTitle: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
-          "By Sochea",
+          "By ${currentNews.authorName}",
           textAlign: TextAlign.center,
           style: TextStyle(color: color),
         ),
@@ -45,17 +53,17 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Title " * 10,
+                  currentNews.title,
                   textAlign: TextAlign.justify,
                   style: const TextStyle(
                       fontSize: 24, fontWeight: FontWeight.w700),
                 ),
                 const VerticalSpacing(25),
-                const Row(
+                Row(
                   children: [
-                    Text("12/07/2023"),
+                    Text(currentNews.dateToshow),
                     Spacer(),
-                    Text("readingTimeText"),
+                    Text(currentNews.readingTimeText),
                   ],
                 ),
                 const VerticalSpacing(20),
@@ -71,8 +79,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                   child: FancyShimmerImage(
                       boxFit: BoxFit.fill,
                       errorWidget: Image.asset('assets/images/empty_image.png'),
-                      imageUrl:
-                          "https://i.guim.co.uk/img/media/cd6efbd1bade44704b0b4f1d7a2b72e3a635a823/0_247_5568_3341/master/5568.jpg?width=1200&height=900&quality=85&auto=format&fit=crop&s=1dc4191028d3f1147475a2ea0acc8d6a"),
+                      imageUrl: currentNews.urlToImage),
                 ),
               ),
               Positioned(
@@ -83,7 +90,15 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                   child: Row(
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () async {
+                          try {
+                            await Share.share(currentNews.url,
+                                subject: currentNews.title);
+                          } catch (err) {
+                            GlobalMethods().errorDialog(
+                                errorMessage: err.toString(), context: context);
+                          }
+                        },
                         child: Card(
                           elevation: 10,
                           shape: const CircleBorder(),
@@ -118,33 +133,31 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
               )
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextContext(
+                const TextContext(
                   lable: "Description",
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
-                VerticalSpacing(10),
+                const VerticalSpacing(10),
                 TextContext(
-                  lable:
-                      "Description Description Description Description Description Description Description Description",
+                  lable: currentNews.description,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
-                VerticalSpacing(20),
-                TextContext(
+                const VerticalSpacing(20),
+                const TextContext(
                   lable: "Content",
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
-                VerticalSpacing(10),
+                const VerticalSpacing(10),
                 TextContext(
-                  lable:
-                      "Content Content Content Content Content Content Content Content",
+                  lable: currentNews.content,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
