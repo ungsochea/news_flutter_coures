@@ -3,22 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_flutter_course/inner_screens/blog_details.dart';
 import 'package:news_flutter_course/inner_screens/news_detail.dart';
+import 'package:news_flutter_course/models/news_models.dart';
 import 'package:news_flutter_course/services/utils.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class TopTrendingWidget extends StatelessWidget {
-  const TopTrendingWidget({super.key, required this.url});
-  final String url;
-
+  const TopTrendingWidget({super.key});
+  // final String url;
   @override
   Widget build(BuildContext context) {
     final size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
+    final newsModelProvider = Provider.of<NewsModel>(context);
+
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, BlogDetailScreen.routeName);
+          Navigator.pushNamed(context, BlogDetailScreen.routeName,
+              arguments: newsModelProvider.publishedAt);
         },
         child: Material(
           color: Theme.of(context).cardColor,
@@ -26,20 +30,25 @@ class TopTrendingWidget extends StatelessWidget {
           child: Column(children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: FancyShimmerImage(
-                boxFit: BoxFit.fill,
-                errorWidget: Image.asset('assets/images/empty_image.png'),
-                imageUrl:
-                    "https://techcrunch.com/wp-content/uploads/2023/07/ETH-zurich-pixar-smoke.jpg",
-                height: size.height * 0.33,
-                width: double.infinity,
+              child: Hero(
+                tag: newsModelProvider.publishedAt,
+                child: FancyShimmerImage(
+                  boxFit: BoxFit.fill,
+                  errorWidget: Image.asset('assets/images/empty_image.png'),
+                  imageUrl: newsModelProvider.urlToImage,
+                  height: size.height * 0.33,
+                  width: double.infinity,
+                ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Title',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  newsModelProvider.title,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 24),
+                ),
               ),
             ),
             Row(
@@ -50,7 +59,7 @@ class TopTrendingWidget extends StatelessWidget {
                       context,
                       PageTransition(
                           type: PageTransitionType.rightToLeft,
-                          child: NewDetilScreen(url: url),
+                          child: NewDetilScreen(url: newsModelProvider.url),
                           inheritTheme: true,
                           ctx: context),
                     );
@@ -59,7 +68,7 @@ class TopTrendingWidget extends StatelessWidget {
                 ),
                 const Spacer(),
                 SelectableText(
-                  "10-07-2023",
+                  newsModelProvider.dateToshow,
                   style: GoogleFonts.montserrat(fontSize: 15),
                 )
               ],

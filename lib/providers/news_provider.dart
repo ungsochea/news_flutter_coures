@@ -16,6 +16,11 @@ class NewsProvider with ChangeNotifier {
     return newsList;
   }
 
+  Future<List<NewsModel>> fetchTopHeadline() async {
+    newsList = await NewsApiServices.getTopHeadline();
+    return newsList;
+  }
+
   NewsModel findbyDate({required String publishedAt}) {
     return newsList
         .firstWhere((newdModel) => newdModel.publishedAt == publishedAt);
