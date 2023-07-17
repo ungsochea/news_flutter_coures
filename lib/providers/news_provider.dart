@@ -21,6 +21,11 @@ class NewsProvider with ChangeNotifier {
     return newsList;
   }
 
+  Future<List<NewsModel>> searchNewsProvider({required String query}) async {
+    newsList = await NewsApiServices.searchNews(query: query);
+    return newsList;
+  }
+
   NewsModel findbyDate({required String publishedAt}) {
     return newsList
         .firstWhere((newdModel) => newdModel.publishedAt == publishedAt);
