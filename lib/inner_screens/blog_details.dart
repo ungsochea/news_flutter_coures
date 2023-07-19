@@ -27,7 +27,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
     final bookmarksProvider = Provider.of<BookmarksProvider>(context);
     final publishedAt = ModalRoute.of(context)!.settings.arguments as String;
     final currentNews = newsProvider.findbyDate(publishedAt: publishedAt);
-
+    bool isBookmark = false;
     return Scaffold(
       appBar: AppBar(
         // iconTheme: IconThemeData(color: color),
@@ -120,8 +120,12 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          await bookmarksProvider.addToBookmark(
-                              newsModel: currentNews);
+                          if (!isBookmark) {
+                            await bookmarksProvider.deleteBookmark();
+                          } else {
+                            await bookmarksProvider.addToBookmark(
+                                newsModel: currentNews);
+                          }
                         },
                         child: Card(
                           elevation: 10,
