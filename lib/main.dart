@@ -1,6 +1,7 @@
 //Packages
 import 'package:flutter/material.dart';
 import 'package:news_flutter_course/inner_screens/blog_details.dart';
+import 'package:news_flutter_course/providers/bookmarks_provider.dart';
 import 'package:news_flutter_course/providers/news_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +49,8 @@ class _MyAppState extends State<MyApp> {
           //Notify about theme changes
           return themeChangeProvider;
         }),
-        ChangeNotifierProvider(create: (_) => NewsProvider())
+        ChangeNotifierProvider(create: (_) => NewsProvider()),
+        ChangeNotifierProvider(create: (_) => BookmarksProvider()),
       ],
       child:
           //Notify about theme changes

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_flutter_course/providers/bookmarks_provider.dart';
 import 'package:news_flutter_course/providers/news_provider.dart';
 import 'package:news_flutter_course/services/global_methods.dart';
 import 'package:news_flutter_course/services/utils.dart';
@@ -23,6 +24,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
+    final bookmarksProvider = Provider.of<BookmarksProvider>(context);
     final publishedAt = ModalRoute.of(context)!.settings.arguments as String;
     final currentNews = newsProvider.findbyDate(publishedAt: publishedAt);
 
@@ -117,7 +119,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () async {
+                          await bookmarksProvider.addToBookmark();
+                        },
                         child: Card(
                           elevation: 10,
                           shape: const CircleBorder(),
